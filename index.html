@@ -45,7 +45,6 @@
             padding: 1rem;
             margin-top: 1rem;
         }
-        /* Animation style for drama text */
         #drama-text p, #drama-text div {
             transition: opacity 0.7s ease-in-out;
         }
@@ -53,7 +52,7 @@
 </head>
 <body class="bg-gray-900 text-white flex items-center justify-center min-h-screen p-4">
 
-    <div id="game-container" class="w-full max-w-2xl mx-auto bg-gray-800 rounded-2xl shadow-2xl p-6 md:p-8 transition-all duration-500">
+    <div id="game-container" class="relative w-full max-w-2xl mx-auto bg-gray-800 rounded-2xl shadow-2xl p-6 md:p-8 transition-all duration-500">
         
         <div id="start-screen" class="text-center">
             <h1 class="text-4xl md:text-5xl font-bold text-orange-400 mb-4">🔥 소방관 과학 퀴즈 🔥</h1>
@@ -114,6 +113,7 @@
 
     <script>
         // DOM Elements
+        const gameContainer = document.getElementById('game-container');
         const startScreen = document.getElementById('start-screen');
         const dramaScreen = document.getElementById('drama-screen');
         const quizScreen = document.getElementById('quiz-screen');
@@ -145,93 +145,83 @@
             {
                 title: "🚨 긴급! 치킨집 주방 화재!",
                 drama: `<p class="text-xl mb-4 text-center">"삐뽀- 삐뽀- 삐뽀-"</p><p class="mb-2">무전기에서 다급한 목소리가 들려온다.</p><p class="font-bold text-red-400 mb-4">"관제센터, 관제센터! 강릉시 옥천동 상가 건물, 치킨집에서 화재 발생! 현장으로 즉시 출동 바란다!"</p><p>소방차에 올라탄 당신의 심장이 거세게 뛴다. 현장에 도착하니 자욱한 연기와 함께 사람들이 비명을 지르며 뛰쳐나오고 있다. 한 아주머니가 울부짖는다.</p><p class="font-bold text-yellow-300 mt-4">"아이고, 우리 가게! 튀김기름에 불이 붙었어요! 어떡해!"</p><p class="mt-2">당신은 소방 장비를 챙기고 결심에 찬 눈으로 불길이 치솟는 주방으로 향한다.</p>`,
-                question: "끓는 기름 위로 불길이 솟구치고 있다! 일촉즉발의 상황, 당신의 첫 번째 판단은?",
-                options: ["재빨리 물을 부어 불을 식힌다.", "젖은 수건이나 배추잎으로 솥을 완전히 덮는다.", "창문을 열어 신선한 공기를 통하게 한다.", "선풍기를 틀어 불을 날려버린다."],
+                question: "끓는 기름(식용유) 위로 불길이 솟구치는 유류 화재 상황! 가장 먼저 해야 할 행동은?",
+                options: ["재빨리 물을 부어 불을 식힌다.", "젖은 수건이나 배추잎으로 솥을 완전히 덮는다.", "창문을 열어 신선한 공기를 통하게 한다.", "일반 분말 소화기를 뿌린다."],
                 answer: 1,
-                hint: "기름에 물을 부으면 어떻게 될까요? 불이 타려면 꼭 필요한 공기 중의 어떤 성분을 없애는 방법을 생각해보세요.",
-                explanation: `<p class="mb-3">훌륭한 판단이야! 이것이 바로 <strong>'질식 소화'</strong>의 원리야.</p><div class="explanation-box"><h4 class="font-bold text-orange-400 mb-2">🔬 과학 원리 탐구</h4><p>불이 타려면 <strong>'탈 물질', '산소', '발화점 이상의 온도'</strong>(연소의 3요소)가 필요해. 젖은 수건으로 덮는 것은 <strong>'산소'</strong> 공급을 막아 불을 끄는 가장 확실한 방법이지!</p></div>`
+                hint: "기름에 물을 부으면 어떻게 될까요? 불이 타려면 꼭 필요한 '산소'를 차단하는 방법을 생각해보세요.",
+                explanation: `<p class="mb-3">훌륭한 판단이야! 이것이 바로 <strong>'질식 소화'</strong>의 원리야.</p><div class="explanation-box"><h4 class="font-bold text-orange-400 mb-2">🔬 과학 원리 탐구</h4><p>불이 타려면 <strong>'탈 물질', '산소', '발화점 이상의 온도'</strong>(연소의 3요소)가 필요해. 젖은 수건으로 덮는 것은 <strong>'산소'</strong> 공급을 막아 불을 끄는 가장 확실한 방법이지! 물을 부으면 뜨거운 기름이 사방으로 튀어 더 큰 화재로 번지니 절대 금물이야.</p></div>`
             },
             {
-                title: "🔥 아차! 휴지통에 붙은 불!",
-                drama: `<p class="mb-2">방에서 숙제를 하고 있는데 어디선가 종이 타는 냄새가 난다. 주위를 둘러보니, 돋보기 실험을 하고 무심코 창가에 둔 돋보기 때문에 햇빛이 모여 휴지통에 불이 붙었다!</p><p class="font-bold text-red-400 mb-4">"앗, 불이야!"</p><p>다행히 불길이 크지 않다. 지금이라면 충분히 끌 수 있어! 당신은 침착하게 주변을 살피며 불을 끌 방법을 찾는다.</p>`,
+                title: "🔥 비번 날의 돌발상황!",
+                drama: `<p class="mb-2">모처럼 쉬는 날이라 집에서 쉬고 있는데, 옆집에서 다급한 비명 소리가 들린다.</p><p class="font-bold text-red-400 mb-4">"불이야!"</p><p>창문 너머로 보니 옆집 아이가 울며 뛰쳐나온다. "돋보기로 장난치다가... 휴지통에 불이 붙었어요!" 들여다보니 아직 작은 불길이다. 소방관의 본능이 발동한다. 지금이라면 충분히 끌 수 있어!</p>`,
                 question: "종이나 나무 같은 일반적인 물질에 붙은 초기 화재를 진압할 때, 가장 효과적인 방법은?",
                 options: ["입으로 강하게 불어 끈다.", "물을 부어 온도를 낮춘다.", "창문을 열어 연기를 뺀다.", "마른 수건으로 덮는다."],
                 answer: 1,
-                hint: "종이나 나무에 붙은 불을 끌 때 가장 흔하게 사용하는 방법은 무엇일까요? 불의 3요소 중 '온도'를 빼앗는 방법을 생각해보세요.",
-                explanation: `<p class="mb-3">정확해! 이것이 바로 <strong>'냉각 소화'</strong>의 원리야!</p><div class="explanation-box"><h4 class="font-bold text-orange-400 mb-2">🔬 과학 원리 탐구</h4><p>물을 뿌리는 것은 불이 타는 데 필요한 '발화점 이상의 온도'를 빼앗는 가장 대표적인 방법이야. 물이 증발하면서 열을 흡수하여, 타는 물질의 온도를 발화점 아래로 떨어뜨려 불을 끄는 거지. 소방관들이 화재 현장에서 물을 사용하는 가장 큰 이유야!</p></div>`
+                hint: "불의 3요소 중 '온도'를 빼앗는 가장 손쉬운 방법을 생각해보세요.",
+                explanation: `<p class="mb-3">정확해! 이것이 바로 <strong>'냉각 소화'</strong>의 원리야!</p><div class="explanation-box"><h4 class="font-bold text-orange-400 mb-2">🔬 과학 원리 탐구</h4><p>물을 뿌리는 것은 불이 타는 데 필요한 '발화점 이상의 온도'를 빼앗는 가장 대표적인 방법이야. 물이 증발하면서 열을 흡수(기화열)하여, 타는 물질의 온도를 발화점 아래로 떨어뜨려 불을 끄는 거지. 소방관들이 화재 현장에서 물을 사용하는 가장 큰 이유야!</p></div>`
             },
-            // ... (The rest of the quiz data remains the same)
             {
-                title: "🔥 건조한 날, 산불 발생!",
-                drama: `<p class="mb-2">가족과 함께 가을 산으로 캠핑을 왔다. 상쾌한 공기를 마시며 주변을 둘러보는데, 저 멀리서 연기가 피어오르는 것이 보인다.</p><p class="font-bold text-red-400 mb-4">"어? 저기 연기 나는 거 같은데?"</p><p>가까이 가보니, 누군가 버리고 간 담배꽁초 때문에 마른 나뭇잎 더미에 불이 붙어 점점 번지고 있다! 아직 불길이 크지 않다. 지금 잡아야 해!</p>`,
-                question: "주변에 있는 물건으로 초기 진압을 해야 한다면 가장 올바른 행동은?",
+                title: " 건조한 날, 등산로 초입 화재!",
+                drama: `<p class="mb-2">건조한 날씨에 산불조심 캠페인을 위해 등산로를 순찰하던 중, 저 멀리서 연기가 피어오르는 것을 발견했다.</p><p class="font-bold text-red-400 mb-4">"저기 연기 나는 거 같은데?"</p><p>가까이 가보니, 누군가 버리고 간 담배꽁초 때문에 마른 나뭇잎 더미에 불이 붙어 주변으로 번지고 있다! 아직 불길이 크지 않다. 지원을 요청하기 전에 초기 진압을 시도해야 한다.</p>`,
+                question: "주변에 물이 없을 때, 초기 산불 진압에 가장 효과적인 도구는?",
                 options: ["마른 나뭇가지를 이용해 불을 쳐서 끈다.", "입고 있던 옷을 벗어 불을 덮는다.", "주변의 마른 흙이나 모래를 뿌려 불을 덮는다.", "불길이 약해지도록 바람을 불어준다."],
                 answer: 2,
                 hint: "불을 직접 때리면 불씨가 날아갈 수 있어요. 불이 더 이상 탈 수 없도록 덮어버리는 걸 생각해보세요.",
                 explanation: `<p class="mb-3">최고의 소방관이야! <strong>'질식 소화'</strong>와 <strong>'냉각 소화'</strong>를 동시에 해냈어!</p><div class="explanation-box"><h4 class="font-bold text-orange-400 mb-2">🔬 과학 원리 탐구</h4><p>마른 흙이나 모래를 뿌리는 것은 불을 덮어서 <strong>'산소'</strong>의 공급을 막고(질식 소화), 동시에 불의 열을 빼앗아 <strong>'발화점 이하'</strong>로 온도를 낮추지(냉각 소화). 연소의 3요소 중 두 가지를 동시에 제거하는 아주 효과적인 방법이야!</p></div>`
             },
             {
-                title: "⚡️ 위험! 콘센트에서 불꽃 발생!",
-                drama: `<p class="mb-2">집에서 컴퓨터 게임을 하던 중, 갑자기 모니터가 꺼지고 코 쪽으로 무언가 타는 냄새가 스며든다.</p><p class="font-bold text-red-400 mb-4">"지지직... 타타탁!"</p><p>소리가 나는 쪽을 보니, 수많은 플러그가 꽂힌 멀티탭에서 스파크가 튀며 시커먼 연기와 함께 불이 붙어있다! 당장 조치를 취해야 한다!</p>`,
-                question: "전기 화재 시 가장 먼저 해야 할 일은?",
-                options: ["급한 대로 물을 부어 끈다.", "두꺼비집(차단기)을 내려 전기를 차단한다.", "젖은 손으로 코드를 뽑는다.", "일반 분말 소화기를 바로 뿌린다."],
+                title: "⚡️ 위험! 과부하된 멀티탭!",
+                drama: `<p class="mb-2">사무실에서 휴식을 취하던 중, 갑자기 전등이 깜빡이고 코 쪽으로 무언가 타는 냄새가 스며든다.</p><p class="font-bold text-red-400 mb-4">"지지직... 타타탁!"</p><p>소리가 나는 쪽을 보니, 수많은 플러그가 꽂힌 멀티탭에서 스파크가 튀며 시커먼 연기와 함께 불이 붙어있다! 당장 조치를 취해야 한다!</p>`,
+                question: "콘센트, 멀티탭 등 전기 기구에서 불이 났을 때 가장 먼저 해야 할 일은?",
+                options: ["급한 대로 물을 부어 끈다.", "두꺼비집(차단기)을 내려 전원을 차단한다.", "젖은 손으로 코드를 뽑는다.", "소화기부터 찾는다."],
                 answer: 1,
-                hint: "물은 전기가 통해요. 불을 끄기 전에 먼저 해야 할 가장 중요한 안전 조치는 무엇일까요?",
-                explanation: `<p class="mb-3">침착한 대응이야! 감전 사고를 막는 게 최우선이지.</p><div class="explanation-box"><h4 class="font-bold text-orange-400 mb-2">🔬 과학 원리 탐구</h4><p>전기 화재 시 물을 뿌리면 전기가 물을 타고 흘러 감전될 수 있어 매우 위험해! 가장 먼저 차단기를 내려 전기를 끊어야 해. 전기가 차단되면 더 이상 전기 화재가 아니므로, 물이나 담요 등으로 불을 끌 수 있어.</p></div>`
+                hint: "물은 전기가 통해요. 감전의 위험이 있으니, 불을 끄기 전에 먼저 해야 할 가장 중요한 안전 조치는 무엇일까요?",
+                explanation: `<p class="mb-3">침착한 대응이야! 감전 사고를 막는 게 최우선이지.</p><div class="explanation-box"><h4 class="font-bold text-orange-400 mb-2">🔬 과학 원리 탐구</h4><p>전기 화재 시 물을 뿌리면 전기가 물을 타고 흘러 감전될 수 있어 매우 위험해! 가장 먼저 차단기를 내려 전원을 끊어야 해. 전원이 차단되면 더 이상 전기 화재가 아니므로, 전용 소화기나 물(완전 차단 확인 후)로 불을 끌 수 있어.</p></div>`
             },
             {
                 title: "🏕️ 캠프파이어 뒷정리",
-                drama: `<p class="mb-2">친구들과의 즐거운 캠프파이어가 끝나고 모두 잠자리에 들 시간이다. 모닥불은 거의 다 꺼져가지만, 재 속에는 아직 빨간 불씨들이 남아있다.</p><p class="font-bold text-yellow-300 mb-4">"이대로 자도 괜찮을까? 밤에 바람 불면 불씨가 날아갈 수도 있는데..."</p><p>당신은 모두의 안전을 위해 불씨를 완벽하게 처리하기로 마음먹는다.</p>`,
-                question: "불씨가 남지 않도록 안전하게 끄는 방법은? '냉각 소화'의 원리를 이용해 봐!",
-                options: ["흙을 덮어 불씨를 숨긴다.", "바람을 불어 빨리 식힌다.", "타고 남은 재가 자연히 식도록 둔다.", "물을 충분히 부어 재의 온도를 낮춘다."],
+                drama: `<p class="mb-2">친구들과의 즐거운 캠프파이어가 끝나고 모두 잠자리에 들 시간이다. 모닥불은 거의 다 꺼져가지만, 재 속에는 아직 빨간 불씨들이 남아있다.</p><p class="font-bold text-yellow-300 mb-4">"이대로 자도 괜찮을까? 밤에 바람 불면 불씨가 날아가서 산불로 번질 수도 있는데..."</p><p>당신은 소방관으로서의 책임감을 느끼고, 불씨를 완벽하게 처리하기로 마음먹는다.</p>`,
+                question: "남아있는 불씨를 가장 안전하게 끄는 방법은? '냉각 소화'의 원리를 이용해 봐!",
+                options: ["흙을 덮어 불씨를 숨긴다.", "바람을 불어 빨리 식힌다.", "타고 남은 재가 자연히 식도록 둔다.", "물을 충분히 부어 재의 온도를 확실히 낮춘다."],
                 answer: 3,
-                hint: "불이 뜨거운 이유는 '발화점'보다 온도가 높기 때문이에요. 이 온도를 어떻게 낮출 수 있을까요?",
-                explanation: `<p class="mb-3">맞았어! 이것이 바로 <strong>'냉각 소화'</strong>야.</p><div class="explanation-box"><h4 class="font-bold text-orange-400 mb-2">🔬 과학 원리 탐구</h4><p>소화의 원리 중 하나는 '발화점 이하'로 온도를 낮추는 거야. 물을 부으면 불의 뜨거운 열을 빼앗아 탈 물질의 온도를 발화점 아래로 떨어뜨려. 불씨가 보이지 않을 때까지 충분한 물을 부어주는 것이 중요해!</p></div>`
+                hint: "불이 꺼진 것처럼 보여도 재 속의 온도는 매우 높아요. 이 온도를 어떻게 확실하게 낮출 수 있을까요?",
+                explanation: `<p class="mb-3">맞았어! 이것이 바로 <strong>'냉각 소화'</strong>의 완벽한 예시야.</p><div class="explanation-box"><h4 class="font-bold text-orange-400 mb-2">🔬 과학 원리 탐구</h4><p>소화의 원리 중 하나는 '발화점 이하'로 온도를 낮추는 거야. 물을 부으면 불의 뜨거운 열을 빼앗아 탈 물질의 온도를 발화점 아래로 떨어뜨려. 불씨가 보이지 않을 때까지 충분한 물을 부어 재가 완전히 차가워졌는지 확인하는 것이 중요해!</p></div>`
             },
             {
                 title: "🔥 산불 확산 방지 작전!",
-                drama: `<p class="mb-2">뉴스 속보가 TV 화면을 가득 채운다. 강원도에서 시작된 거대한 산불이 강한 바람을 타고 빠르게 번지고 있다는 소식이다.</p><p class="font-bold text-red-400 mb-4">"소방대원들은 불길이 향하는 길목의 나무들을 미리 베어내는 '맞불 작전'을 펼치고 있습니다!"</p><p>헬리콥터가 촬영한 영상에는 소방관들이 필사적으로 나무를 베어내어 넓은 공터를 만드는 모습이 보인다. 당신은 그 이유가 무엇인지 바로 알아차렸다.</p>`,
-                question: "소방관들이 불이 가는 길목의 나무들을 미리 베어내는 이유는 무엇일까?",
+                drama: `<p class="mb-2">뉴스 속보가 TV 화면을 가득 채운다. 강원도에서 시작된 거대한 산불이 강한 바람을 타고 빠르게 번지고 있다는 소식에, 당신의 팀도 지원 출동 명령을 받았다.</p><p class="font-bold text-red-400 mb-4">"불길 진행 방향을 예측하고, 방어선을 구축한다! '맞불 작전' 준비!"</p><p>현장 지휘관의 지시에 따라, 당신과 동료들은 불길이 향하는 길목의 나무들을 필사적으로 베어내어 넓은 공터, 즉 '방화선'을 만들고 있다.</p>`,
+                question: "소방관들이 산불 진행 방향의 나무들을 미리 베어내는 '제거 소화'의 주된 이유는 무엇일까?",
                 options: ["소방차가 지나갈 길을 만들기 위해", "바람의 방향을 바꾸기 위해", "불이 더 이상 탈 물질이 없게 하기 위해", "헬리콥터가 물을 뿌리기 쉽게 하기 위해"],
                 answer: 2,
                 hint: "불이 앞으로 나아가려면 먹이(탈 물질)가 필요해요. 소방관들은 불의 먹이를 어떻게 없앨 수 있을까요?",
-                explanation: `<p class="mb-3">전략적인 판단이야! <strong>'제거 소화'</strong>의 원리를 정확히 알고 있구나.</p><div class="explanation-box"><h4 class="font-bold text-orange-400 mb-2">🔬 과학 원리 탐구</h4><p>불이 계속 타려면 '탈 물질'이 반드시 필요해. 산불이 번져나갈 길목의 나무(탈 물질)를 미리 없애버리면, 불은 더 이상 번지지 못하고 자연스럽게 힘을 잃게 돼. 이것을 '제거 소화'라고 해.</p></div>`
+                explanation: `<p class="mb-3">전략적인 판단이야! <strong>'제거 소화'</strong>의 원리를 정확히 알고 있구나.</p><div class="explanation-box"><h4 class="font-bold text-orange-400 mb-2">🔬 과학 원리 탐구</h4><p>불이 계속 타려면 '탈 물질'이 반드시 필요해. 산불이 번져나갈 길목의 나무(탈 물질)를 미리 없애버리면, 불은 더 이상 번지지 못하고 자연스럽게 힘을 잃게 돼. 이것을 '제거 소화'라고 해. 가스레인지의 밸브를 잠그는 것도 제거 소화의 일종이야.</p></div>`
             },
             {
-                title: "킁킁! 이상한 냄새!",
-                drama: `<p class="mb-2">늦은 밤, 부엌에서 물을 마시려는데 코끝에 익숙하지 않은 시큼한 냄새가 맴돈다. 가스레인지 주변으로 다가가니 냄새가 더 강해진다.</p><p class="font-bold text-yellow-300 mb-4">"어? 이거 가스 새는 냄새 같은데..."</p><p>아직 불이 붙지는 않았지만, 매우 위험한 상황이다. 작은 실수 하나가 큰 사고로 이어질 수 있다. 당신은 숨을 참고 침착하게 행동을 개시한다.</p>`,
-                question: "가스가 누출된 것으로 의심될 때, 가장 먼저 해야 할 행동은?",
-                options: ["냄새의 원인을 찾기 위해 라이터를 켜본다.", "환풍기를 틀어 냄새를 빨리 내보낸다.", "창문을 활짝 열어 환기시킨다.", "방향제를 뿌려 냄새를 없앤다."],
+                title: "킁킁! 보이지 않는 위험!",
+                drama: `<p class="mb-2">한밤중, 신고를 받고 출동한 다세대 주택. 현관문을 열자 코끝에 익숙하지 않은 시큼한 냄새가 맴돈다. 가스 탐지기의 수치가 희미하게 올라간다.</p><p class="font-bold text-yellow-300 mb-4">"가스 누출 의심! 모두 장비 착용하고, 전기 스위치 절대 조작하지 마!"</p><p>아직 불이 붙지는 않았지만, 매우 위험한 상황이다. 작은 스파크 하나가 대형 폭발로 이어질 수 있다. 당신은 숨을 참고 침착하게 행동을 개시한다.</p>`,
+                question: "가스가 누출된 것으로 의심되는 공간에 진입했을 때, 가장 먼저 해야 할 행동은?",
+                options: ["냄새의 원인을 찾기 위해 랜턴을 켠다.", "환풍기를 틀어 냄새를 빨리 내보낸다.", "창문을 활짝 열어 환기시킨다.", "방향제를 뿌려 냄새를 없앤다."],
                 answer: 2,
-                hint: "가스가 가득한 곳에서는 아주 작은 불꽃도 위험해요. 전기를 사용하는 제품을 켜는 것은 안전할까요?",
+                hint: "가스가 가득한 곳에서는 아주 작은 전기 불꽃도 폭발을 일으킬 수 있어요. 전기를 사용하는 제품을 켜는 것은 안전할까요?",
                 explanation: `<p class="mb-3">아주 중요한 안전 수칙이야! 작은 불꽃도 큰 폭발로 이어질 수 있어.</p><div class="explanation-box"><h4 class="font-bold text-orange-400 mb-2">🔬 과학 원리 탐구</h4><p>공기 중에 가스가 많이 섞여 있으면 작은 정전기나 스위치 불꽃만으로도 폭발할 수 있어. 그래서 전기를 사용하는 환풍기, 전등 스위치를 켜는 행동은 절대 금물! 창문을 열어 가스의 농도를 낮추는 것이 가장 안전한 첫 번째 행동이야.</p></div>`
             },
             {
-                title: "소화기를 사용하라!",
-                drama: `<p class="mb-2">학교 복도를 지나가는데, 과학실 앞 쓰레기통에서 연기가 피어오르는 것을 발견했다! 누군가 실험하고 남은 불씨를 버린 모양이다.</p><p class="font-bold text-red-400 mb-4">"불이야!"</p><p>다행히 불길이 크지 않고, 바로 옆에 소화기가 비치되어 있다. 당신은 지체 없이 소화기를 집어 들었다. 사용법을 떠올려보자!</p>`,
+                title: "작전을 개시하라! 소화기 사용법!",
+                drama: `<p class="mb-2">상가 건물 복합 화재 진압 중! 주 화점은 잡았지만, 복도 반대편에서 새로운 연기가 피어오른다.</p><p class="font-bold text-red-400 mb-4">"젠장, 불씨가 옮겨붙었나!"</p><p>동료가 소리친다. "김 소방관! 저쪽 불은 자네가 맡아줘! 소화기 써!" 당신은 벽에 비치된 소화기를 신속하게 집어 들었다. 훈련했던 대로 사용법을 떠올려본다.</p>`,
                 question: "소화기를 사용할 때, 가장 먼저 해야 할 일은 무엇일까?",
                 options: ["손잡이를 꽉 움켜쥔다.", "안전핀을 뽑는다.", "노즐을 잡고 불을 향해 겨눈다.", "바람을 등지고 선다."],
                 answer: 1,
-                hint: "소화기 손잡이를 그냥 누르면 약제가 나가지 않아요. 무엇인가가 막고 있기 때문이죠.",
-                explanation: `<p class="mb-3">정답! 안전핀을 뽑지 않으면 소화기는 절대 작동하지 않아.</p><div class="explanation-box"><h4 class="font-bold text-orange-400 mb-2">🔬 소화기 사용 순서</h4><p><strong>1. 안전핀을 뽑는다.</strong><br><strong>2. 노즐(호스)을 잡고 불쪽을 향한다.</strong><br><strong>3. 손잡이를 힘껏 움켜쥔다.</strong><br><strong>4. 빗자루로 쓸듯이 불의 아랫부분을 향해 골고루 분사한다.</strong> 이 순서를 꼭 기억해!</p></div>`
-            },
-            {
-                title: "검은 연기의 정체는?",
-                drama: `<p class="mb-2">화재 대피 훈련 중이다. 교관이 소리친다.</p><p class="font-bold text-yellow-300 mb-4">"화재 시 가장 위험한 것은 불길 그 자체가 아니라 바로 연기입니다! 특히 검은 연기는 아주 해롭죠!"</p><p>교관의 설명에 따르면, 이 검은 연기는 산소가 부족할 때 발생하며, 시야를 가리고 유독가스를 포함하고 있다고 한다. 당신은 이 검은 연기의 정체가 무엇인지 궁금해졌다.</p>`,
-                question: "불완전 연소 시 생기는 검고 해로운 가루의 정체는 무엇일까?",
-                options: ["산소", "이산화탄소", "그을음", "수증기"],
-                answer: 2,
-                hint: "물질이 완전히 타지 못하고 남은 검은 가루를 무엇이라고 부를까요?",
-                explanation: `<p class="mb-3">맞아. 그을음은 아주 위험한 물질이야.</p><div class="explanation-box"><h4 class="font-bold text-orange-400 mb-2">🔬 과학 원리 탐구</h4><p>산소가 부족한 상태에서 물질이 타면 '불완전 연소'가 일어나. 이때 유독가스와 함께 '그을음(탄소 가루)'이 발생해. 이 그을음은 우리 몸에 매우 해로우며, 화재 시 시야를 가려 대피를 어렵게 만들어. 그래서 화재 시에는 젖은 수건으로 코와 입을 막고 자세를 낮춰야 해.</p></div>`
+                hint: "소화기 손잡이를 그냥 누르면 약제가 나가지 않아요. 무엇인가가 발사를 막고 있기 때문이죠.",
+                explanation: `<p class="mb-3">정답! 안전핀을 뽑지 않으면 소화기는 절대 작동하지 않아.</p><div class="explanation-box"><h4 class="font-bold text-orange-400 mb-2">🔬 소화기 사용 순서 (PASS)</h4><p><strong>P (Pull)</strong>: 안전핀을 뽑는다.<br><strong>A (Aim)</strong>: 노즐(호스)을 잡고 불의 아랫부분을 향한다.<br><strong>S (Squeeze)</strong>: 손잡이를 힘껏 움켜쥔다.<br><strong>S (Sweep)</strong>: 빗자루로 쓸듯이 골고루 분사한다. <br>이 'PASS' 순서를 꼭 기억해!</p></div>`
             },
             {
                 title: "불길은 어디로 향할까?",
-                drama: `<p class="mb-2">영화 속 한 장면. 주인공이 불이 난 건물 아래층에 갇혔다. 주인공은 다급하게 외친다.</p><p class="font-bold text-red-400 mb-4">"위로 가면 안 돼! 연기 때문에 위험해! 아래로, 최대한 아래로 대피해야 해!"</p><p>왜 불이 나면 위층이 더 위험하고, 몸을 낮춰 대피해야 하는 걸까? 불과 뜨거운 연기의 움직임에는 중요한 과학 원리가 숨어있다.</p>`,
-                question: "불길과 뜨거운 연기는 주로 어느 방향으로 향할까? 이 현상 때문에 높은 곳이 더 위험해.",
+                drama: `<p class="mb-2">치열한 화재 진압을 마치고 소방서로 복귀했다. 베테랑 팀장님이 대원들을 모아놓고 오늘 현장에 대해 복기한다.</p><p class="font-bold text-yellow-300 mb-4">"오늘 현장에서 왜 모두에게 자세를 낮추라고 소리쳤는지 아나? 불과 연기는 특정 방향으로 움직이는 성질이 있기 때문이야. 이걸 모르면 순식간에 위험해져."</p><p>팀장님의 설명에 집중한다. 불과 뜨거운 연기의 움직임에는 중요한 과학 원리가 숨어있다.</p>`,
+                question: "불길과 뜨거운 유독성 연기는 주로 어느 방향으로 향할까? 이 현상 때문에 높은 곳이 더 위험하다.",
                 options: ["아래쪽으로 가라앉는다.", "창문 쪽으로 향한다.", "위쪽으로 솟구친다.", "사방으로 똑같이 퍼진다."],
                 answer: 2,
-                hint: "뜨거운 공기는 가벼울까요, 무거울까요? 가벼운 것은 위로 갈까요, 아래로 갈까요?",
-                explanation: `<p class="mb-3">정확해! 이것이 바로 <strong>'대류'</strong> 현상이야.</p><div class="explanation-box"><h4 class="font-bold text-orange-400 mb-2">🔬 과학 원리 탐구</h4><p>공기는 뜨거워지면 가벼워져서 위로 올라가고, 차가운 공기는 무거워서 아래로 내려와. 불로 인해 뜨거워진 공기와 연기는 빠르게 위로 올라가 천장을 뜨겁게 만들고, 불이 더 쉽게 번지게 해. 그래서 화재 시 대피할 때는 몸을 낮춰야 하는 거야.</p></div>`
+                hint: "뜨거운 공기는 가벼울까요, 무거울까요? 열기구는 왜 위로 떠오를까요?",
+                explanation: `<p class="mb-3">정확해! 이것이 바로 <strong>'대류'</strong> 현상이야.</p><div class="explanation-box"><h4 class="font-bold text-orange-400 mb-2">🔬 과학 원리 탐구</h4><p>공기는 뜨거워지면 밀도가 낮아져(가벼워져) 위로 올라가고, 상대적으로 차가운 공기는 무거워서 아래로 내려와. 불로 인해 뜨거워진 공기와 연기는 빠르게 위로 올라가 천장과 위층으로 퍼져나가. 그래서 화재 시 대피할 때는 유독가스를 피해 신선한 공기가 있는 아래쪽으로 몸을 낮춰야 하는 거야.</p></div>`
             },
         ];
 
@@ -242,76 +232,113 @@
         let timeLeft;
         const TIME_LIMIT = 20;
 
-        // --- Sound Effects Setup (Tone.js) ---
-        let musicLoop, correctSound, incorrectSound, selectSound, clickSound;
+        // --- Sound Setup ---
+        let soundsReady = false;
+        let dramaMusicLoop, dramaAlarmSeq, quizMusicSeq, correctSound, incorrectSound, selectSound, clickSound, timerTickSound;
 
         function setupSounds() {
-            // Background music synth
-            const musicSynth = new Tone.FMSynth({
-                harmonicity: 3, modulationIndex: 10, detune: 0,
-                oscillator: { type: "sine" },
-                envelope: { attack: 0.01, decay: 0.1, sustain: 0.5, release: 1 },
-                modulation: { type: "square" },
-                modulationEnvelope: { attack: 0.5, decay: 0, sustain: 1, release: 0.5 }
+            if (soundsReady) return;
+
+            // --- Drama Scene Music (Urgent) ---
+            const dramaHeartbeat = new Tone.MembraneSynth({
+                volume: 0,
+                pitchDecay: 0.1, octaves: 2,
+                envelope: { attack: 0.01, decay: 0.8, sustain: 0.01, release: 0.5 }
             }).toDestination();
-            musicLoop = new Tone.Loop(time => {
-                musicSynth.triggerAttackRelease("C2", "8n", time);
+            dramaMusicLoop = new Tone.Loop(time => {
+                dramaHeartbeat.triggerAttackRelease("C1", "8n", time);
             }, "4n");
 
-            // Sound for correct answer (bright, ascending)
-            correctSound = new Tone.Synth({
-                oscillator: { type: "sine" },
-                envelope: { attack: 0.005, decay: 0.2, sustain: 0.2, release: 0.2 }
+            const dramaAlarm = new Tone.Synth({
+                volume: -12,
+                oscillator: { type: 'sawtooth' },
+                envelope: { attack: 0.01, decay: 0.1, sustain: 0, release: 0.1 }
             }).toDestination();
+            dramaAlarmSeq = new Tone.Sequence((time, note) => {
+                dramaAlarm.triggerAttackRelease(note, '16n', time);
+            }, ['G5', null, 'G5', null, 'G5', null, 'G5', null], '4n');
 
-            // Sound for incorrect answer (low, dissonant)
-            incorrectSound = new Tone.Synth({
-                oscillator: { type: "square" },
-                envelope: { attack: 0.01, decay: 0.5, sustain: 0, release: 0.5 }
+
+            // --- Quiz Scene Music (Calm, focused melody) ---
+            const quizSynth = new Tone.PluckSynth({
+                volume: -4, attackNoise: 0.5, dampening: 4000, resonance: 0.9
             }).toDestination();
+            const quizMelody = ['C4', 'E4', 'G4', 'E4', 'D4', 'F4', 'A4', 'F4', 'B3', 'D4', 'G4', 'D4', 'C4', 'E4', 'G4', 'E4'];
+            quizMusicSeq = new Tone.Sequence((time, note) => {
+                quizSynth.triggerAttack(note, time);
+            }, quizMelody, '8n');
 
-            // Sound for selecting an option (quick blip)
+            // --- Sound Effects ---
+            correctSound = new Tone.PolySynth(Tone.Synth, {
+                volume: -2, oscillator: { type: "triangle" },
+                envelope: { attack: 0.01, decay: 0.4, sustain: 0.1, release: 0.2 }
+            }).toDestination();
+            incorrectSound = new Tone.FMSynth({
+                volume: 0, harmonicity: 2, modulationIndex: 5, oscillator: { type: "square" },
+                envelope: { attack: 0.01, decay: 0.8, sustain: 0, release: 0.5 }
+            }).toDestination();
             selectSound = new Tone.MembraneSynth({
-                pitchDecay: 0.01, octaves: 6,
-                envelope: { attack: 0.001, decay: 0.2, sustain: 0 }
+                volume: -6, pitchDecay: 0.01, octaves: 4,
+                envelope: { attack: 0.001, decay: 0.15, sustain: 0 }
             }).toDestination();
-
-            // Sound for general button clicks
             clickSound = new Tone.MembraneSynth({
-                 pitchDecay: 0.05, octaves: 2,
-                 envelope: { attack: 0.001, decay: 0.1, sustain: 0 }
+                volume: -8, pitchDecay: 0.05, octaves: 2,
+                envelope: { attack: 0.001, decay: 0.1, sustain: 0 }
             }).toDestination();
-        }
+            timerTickSound = new Tone.MembraneSynth({
+                volume: -10, pitchDecay: 0.008, octaves: 10,
+                envelope: { attack: 0.001, decay: 0.1, sustain: 0 }
+            }).toDestination();
 
-        function playMusic() {
+            soundsReady = true;
+        }
+        
+        async function startAudioContext() {
             if (Tone.context.state !== 'running') {
-                Tone.context.resume();
-            }
-            Tone.Transport.start();
-            musicLoop.start(0);
-        }
-
-        function stopMusic() {
-            if (musicLoop && musicLoop.state === "started") {
-                musicLoop.stop();
-                Tone.Transport.stop();
+                await Tone.start();
+                console.log("Audio context started!");
             }
         }
-        // --- End of Sound Effects Setup ---
+        
+        function stopAllMusic() {
+            if (!soundsReady) return;
+            if (Tone.Transport.state === 'started') {
+                Tone.Transport.cancel(0); // Clear all scheduled events
+                dramaMusicLoop.stop(0);
+                dramaAlarmSeq.stop(0);
+                quizMusicSeq.stop(0);
+            }
+        }
 
+        async function playMusic(type) {
+            if (!soundsReady) return;
+            await startAudioContext();
+            
+            stopAllMusic(); // Stop everything before starting new music
+            
+            if (type === 'drama') {
+                dramaMusicLoop.start(0);
+                dramaAlarmSeq.start(0);
+            } else if (type === 'quiz') {
+                quizMusicSeq.start(0);
+            }
+            
+            if (Tone.Transport.state !== 'started') {
+                Tone.Transport.start();
+            }
+        }
 
-        function startGame() {
+        async function startGame() {
             currentQuizIndex = 0;
             score = 0;
             startScreen.classList.add('hidden');
             endScreen.classList.add('hidden');
             quizScreen.classList.add('hidden');
             
-            // Initialize audio on first user interaction
-            if (!musicLoop) {
+            if (!soundsReady) {
                 setupSounds();
             }
-            Tone.start();
+            await startAudioContext();
             clickSound.triggerAttackRelease("C2", "8n");
 
             loadStage();
@@ -325,7 +352,8 @@
             quizScreen.classList.add('hidden');
             dramaScreen.classList.remove('hidden');
             
-            playMusic(); // Play music when drama starts
+            playMusic('drama');
+            
             animateDramaText(currentQuiz.drama, dramaText, () => {
                 showQuestionButton.classList.remove('hidden');
             });
@@ -376,9 +404,9 @@
 
         function showQuestionView() {
             clickSound.triggerAttackRelease("C2", "8n");
-            stopMusic(); // Stop music when quiz starts
             dramaScreen.classList.add('hidden');
             quizScreen.classList.remove('hidden');
+            playMusic('quiz');
             startTimer();
         }
 
@@ -393,6 +421,7 @@
                 timerElement.textContent = `남은 시간: ${timeLeft}`;
                 if (timeLeft < 6) {
                     timerElement.style.color = '#f87171'; // red-400
+                    if(soundsReady) timerTickSound.triggerAttackRelease("C7", "32n");
                 }
                 if (timeLeft <= 0) {
                     clearInterval(timerInterval);
@@ -402,7 +431,7 @@
         }
 
         function handleTimeUp() {
-            incorrectSound.triggerAttackRelease("A2", "4n");
+            incorrectSound.triggerAttackRelease("A2", "2n");
             optionsContainer.classList.add('disabled');
             resultTitle.textContent = "⏰ 시간 초과! 힌트를 보고 다시 시도해 보세요.";
             resultTitle.style.color = '#f87171';
@@ -425,7 +454,7 @@
 
         function selectAnswer(e) {
             selectSound.triggerAttackRelease("C4", "8n");
-            clearInterval(timerInterval); // Stop the timer
+            clearInterval(timerInterval);
             const selectedButton = e.currentTarget;
             const selectedIndex = parseInt(selectedButton.dataset.index);
             const currentQuiz = quizData[currentQuizIndex];
@@ -438,7 +467,7 @@
                     score++;
                     answeredCorrectly = true;
                 }
-                correctSound.triggerAttackRelease("G4", "8n", Tone.now() + 0.1);
+                correctSound.triggerAttackRelease(["C4", "E4", "G4"], "8n", Tone.now() + 0.1);
                 selectedButton.classList.add('correct');
                 resultTitle.textContent = "✅ 정답입니다!";
                 resultTitle.style.color = '#34d399';
@@ -446,11 +475,11 @@
                 nextStageButton.classList.remove('hidden');
                 retryButton.classList.add('hidden');
             } else {
-                incorrectSound.triggerAttackRelease("A2", "4n", Tone.now() + 0.1);
+                incorrectSound.triggerAttackRelease("A2", "2n", Tone.now() + 0.1);
                 selectedButton.classList.add('incorrect');
                 resultTitle.textContent = "❌ 오답입니다! 힌트를 확인하고 다시 풀어보세요.";
                 resultTitle.style.color = '#f87171';
-                resultExplanation.innerHTML = `<div class="hint-box"><h4 class="font-bold text-blue-400 mb-2">� 힌트</h4><p>${currentQuiz.hint}</p></div>`;
+                resultExplanation.innerHTML = `<div class="hint-box"><h4 class="font-bold text-blue-400 mb-2">💡 힌트</h4><p>${currentQuiz.hint}</p></div>`;
                 retryButton.classList.remove('hidden');
                 nextStageButton.classList.add('hidden');
             }
@@ -470,7 +499,7 @@
         }
         
         function showEndScreen() {
-            stopMusic(); // Ensure music is stopped at the end
+            stopAllMusic();
             quizScreen.classList.add('hidden');
             dramaScreen.classList.add('hidden');
             endScreen.classList.remove('hidden');
@@ -485,7 +514,7 @@
             finalMessage.textContent = message;
         }
 
-        // Event Listeners
+        // --- Event Listeners ---
         startButton.addEventListener('click', startGame);
         restartButton.addEventListener('click', () => {
              clickSound.triggerAttackRelease("C2", "8n");
