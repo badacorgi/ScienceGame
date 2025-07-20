@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>소방관 과학 퀴즈 게임</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.77/Tone.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
@@ -159,6 +160,7 @@
                 hint: "종이나 나무에 붙은 불을 끌 때 가장 흔하게 사용하는 방법은 무엇일까요? 불의 3요소 중 '온도'를 빼앗는 방법을 생각해보세요.",
                 explanation: `<p class="mb-3">정확해! 이것이 바로 <strong>'냉각 소화'</strong>의 원리야!</p><div class="explanation-box"><h4 class="font-bold text-orange-400 mb-2">🔬 과학 원리 탐구</h4><p>물을 뿌리는 것은 불이 타는 데 필요한 '발화점 이상의 온도'를 빼앗는 가장 대표적인 방법이야. 물이 증발하면서 열을 흡수하여, 타는 물질의 온도를 발화점 아래로 떨어뜨려 불을 끄는 거지. 소방관들이 화재 현장에서 물을 사용하는 가장 큰 이유야!</p></div>`
             },
+            // ... (The rest of the quiz data remains the same)
             {
                 title: "🔥 건조한 날, 산불 발생!",
                 drama: `<p class="mb-2">가족과 함께 가을 산으로 캠핑을 왔다. 상쾌한 공기를 마시며 주변을 둘러보는데, 저 멀리서 연기가 피어오르는 것이 보인다.</p><p class="font-bold text-red-400 mb-4">"어? 저기 연기 나는 거 같은데?"</p><p>가까이 가보니, 누군가 버리고 간 담배꽁초 때문에 마른 나뭇잎 더미에 불이 붙어 점점 번지고 있다! 아직 불길이 크지 않다. 지금 잡아야 해!</p>`,
@@ -240,12 +242,78 @@
         let timeLeft;
         const TIME_LIMIT = 20;
 
+        // --- Sound Effects Setup (Tone.js) ---
+        let musicLoop, correctSound, incorrectSound, selectSound, clickSound;
+
+        function setupSounds() {
+            // Background music synth
+            const musicSynth = new Tone.FMSynth({
+                harmonicity: 3, modulationIndex: 10, detune: 0,
+                oscillator: { type: "sine" },
+                envelope: { attack: 0.01, decay: 0.1, sustain: 0.5, release: 1 },
+                modulation: { type: "square" },
+                modulationEnvelope: { attack: 0.5, decay: 0, sustain: 1, release: 0.5 }
+            }).toDestination();
+            musicLoop = new Tone.Loop(time => {
+                musicSynth.triggerAttackRelease("C2", "8n", time);
+            }, "4n");
+
+            // Sound for correct answer (bright, ascending)
+            correctSound = new Tone.Synth({
+                oscillator: { type: "sine" },
+                envelope: { attack: 0.005, decay: 0.2, sustain: 0.2, release: 0.2 }
+            }).toDestination();
+
+            // Sound for incorrect answer (low, dissonant)
+            incorrectSound = new Tone.Synth({
+                oscillator: { type: "square" },
+                envelope: { attack: 0.01, decay: 0.5, sustain: 0, release: 0.5 }
+            }).toDestination();
+
+            // Sound for selecting an option (quick blip)
+            selectSound = new Tone.MembraneSynth({
+                pitchDecay: 0.01, octaves: 6,
+                envelope: { attack: 0.001, decay: 0.2, sustain: 0 }
+            }).toDestination();
+
+            // Sound for general button clicks
+            clickSound = new Tone.MembraneSynth({
+                 pitchDecay: 0.05, octaves: 2,
+                 envelope: { attack: 0.001, decay: 0.1, sustain: 0 }
+            }).toDestination();
+        }
+
+        function playMusic() {
+            if (Tone.context.state !== 'running') {
+                Tone.context.resume();
+            }
+            Tone.Transport.start();
+            musicLoop.start(0);
+        }
+
+        function stopMusic() {
+            if (musicLoop && musicLoop.state === "started") {
+                musicLoop.stop();
+                Tone.Transport.stop();
+            }
+        }
+        // --- End of Sound Effects Setup ---
+
+
         function startGame() {
             currentQuizIndex = 0;
             score = 0;
             startScreen.classList.add('hidden');
             endScreen.classList.add('hidden');
             quizScreen.classList.add('hidden');
+            
+            // Initialize audio on first user interaction
+            if (!musicLoop) {
+                setupSounds();
+            }
+            Tone.start();
+            clickSound.triggerAttackRelease("C2", "8n");
+
             loadStage();
         }
 
@@ -257,6 +325,7 @@
             quizScreen.classList.add('hidden');
             dramaScreen.classList.remove('hidden');
             
+            playMusic(); // Play music when drama starts
             animateDramaText(currentQuiz.drama, dramaText, () => {
                 showQuestionButton.classList.remove('hidden');
             });
@@ -306,6 +375,8 @@
         }
 
         function showQuestionView() {
+            clickSound.triggerAttackRelease("C2", "8n");
+            stopMusic(); // Stop music when quiz starts
             dramaScreen.classList.add('hidden');
             quizScreen.classList.remove('hidden');
             startTimer();
@@ -331,6 +402,7 @@
         }
 
         function handleTimeUp() {
+            incorrectSound.triggerAttackRelease("A2", "4n");
             optionsContainer.classList.add('disabled');
             resultTitle.textContent = "⏰ 시간 초과! 힌트를 보고 다시 시도해 보세요.";
             resultTitle.style.color = '#f87171';
@@ -341,6 +413,7 @@
         }
 
         function retryQuestion() {
+            clickSound.triggerAttackRelease("C2", "8n");
             resultContainer.classList.add('hidden');
             retryButton.classList.add('hidden');
             optionsContainer.classList.remove('disabled');
@@ -351,6 +424,7 @@
         }
 
         function selectAnswer(e) {
+            selectSound.triggerAttackRelease("C4", "8n");
             clearInterval(timerInterval); // Stop the timer
             const selectedButton = e.currentTarget;
             const selectedIndex = parseInt(selectedButton.dataset.index);
@@ -364,6 +438,7 @@
                     score++;
                     answeredCorrectly = true;
                 }
+                correctSound.triggerAttackRelease("G4", "8n", Tone.now() + 0.1);
                 selectedButton.classList.add('correct');
                 resultTitle.textContent = "✅ 정답입니다!";
                 resultTitle.style.color = '#34d399';
@@ -371,10 +446,11 @@
                 nextStageButton.classList.remove('hidden');
                 retryButton.classList.add('hidden');
             } else {
+                incorrectSound.triggerAttackRelease("A2", "4n", Tone.now() + 0.1);
                 selectedButton.classList.add('incorrect');
                 resultTitle.textContent = "❌ 오답입니다! 힌트를 확인하고 다시 풀어보세요.";
                 resultTitle.style.color = '#f87171';
-                resultExplanation.innerHTML = `<div class="hint-box"><h4 class="font-bold text-blue-400 mb-2">💡 힌트</h4><p>${currentQuiz.hint}</p></div>`;
+                resultExplanation.innerHTML = `<div class="hint-box"><h4 class="font-bold text-blue-400 mb-2">� 힌트</h4><p>${currentQuiz.hint}</p></div>`;
                 retryButton.classList.remove('hidden');
                 nextStageButton.classList.add('hidden');
             }
@@ -384,6 +460,7 @@
         }
 
         function showNextStage() {
+            clickSound.triggerAttackRelease("C2", "8n");
             currentQuizIndex++;
             if (currentQuizIndex < quizData.length) {
                 loadStage();
@@ -393,6 +470,7 @@
         }
         
         function showEndScreen() {
+            stopMusic(); // Ensure music is stopped at the end
             quizScreen.classList.add('hidden');
             dramaScreen.classList.add('hidden');
             endScreen.classList.remove('hidden');
@@ -409,10 +487,14 @@
 
         // Event Listeners
         startButton.addEventListener('click', startGame);
-        restartButton.addEventListener('click', startGame);
+        restartButton.addEventListener('click', () => {
+             clickSound.triggerAttackRelease("C2", "8n");
+             startGame();
+        });
         showQuestionButton.addEventListener('click', showQuestionView);
         nextStageButton.addEventListener('click', showNextStage);
         retryButton.addEventListener('click', retryQuestion);
     </script>
 </body>
 </html>
+�
